@@ -60,6 +60,8 @@ for i in in_annots[1:]:
             ST[seqtype]['source_niche'] = [""]
         if col[7] != "" and col[8] != "":
             ST[seqtype]['dates'] = [datetime.date(int(col[7]),int(col[8]),1)]
+        elif col[7] != "" and col[8] == "":
+            ST[seqtype]['dates'] = [datetime.date(int(col[7]), 1, 1)]
         else:
             ST[seqtype]['dates'] = []
     elif seqtype != "NaN":
@@ -75,11 +77,16 @@ for i in in_annots[1:]:
         ST[seqtype]['institution'] += [col[23]]
         if col[12] == "Australia":
             ST[seqtype]['Australia'] += 1
-        if col[7] != "" and col[8] != "":
-            if "dates" in ST[seqtype]:
+        if "dates" in ST[seqtype]:
+            if col[7] != "" and col[8] != "":
                 ST[seqtype]['dates'] += [datetime.date(int(col[7]),int(col[8]),1)]
-            else:
-                ST[seqtype]['dates'] = [datetime.date(int(col[7]), int(col[8]), 1)]
+            elif col[7] != "" and col[8] == "":
+                ST[seqtype]['dates'] += [datetime.date(int(col[7]), 1, 1)]
+        else:
+            if col[7] != "" and col[8] != "":
+                ST[seqtype]['dates'] == [datetime.date(int(col[7]),int(col[8]),1)]
+            elif col[7] != "" and col[8] == "":
+                ST[seqtype]['dates'] == [datetime.date(int(col[7]), 1, 1)]
 
 ST_annots.write("Sequence type\tNumber of strains\tIn Australia?\tMajority Country\tMajority Country %\tEarliest detection\tLatest detection\tAnimal Niche\trMLST type\t7gene MLST type\tinstitution\n")
 # ST_annots.write("Sequence type\tNumber of strains\tMajority Country\tMajority Country %\tEarliest detection\tLatest detection\tAnimal Niche\n")

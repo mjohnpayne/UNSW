@@ -12,7 +12,8 @@ outfile = open(sys.argv[1][:-4] + "_seqsero_10only_accessions.txt","w")
 
 outfile2 = open(sys.argv[1][:-4] + "_seqsero_10only_details.txt","w")
 
-serovar_list = ["Aberdeen","Chester","Infantis","Muenchen","Saintpaul","Stanley","Virchow","Waycross","Typhimurium","Enteritidis"]
+#serovar_list = ["Aberdeen","Chester","Infantis","Muenchen","Saintpaul","Stanley","Virchow","Waycross","Typhimurium","Enteritidis"]
+serovar_list = ["Typhimurium"]
 
 strains = {}
 count = {}
@@ -43,7 +44,7 @@ for i in strains:
             outfile.write("\n".join(strains[i]) +"\n")
             outfile2.write(deets[i])
         else:
-            numlis = random.sample(range(0,len(strains[i])),5)
+            numlis = random.sample(range(0,len(strains[i])),20)
             for j in numlis:
                 outfile.write(strains[i][j]+"\n")
                 outfile2.write(deets[i][j])
