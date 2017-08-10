@@ -27,7 +27,7 @@ try:
         profile_link = scheme_record.get('download_sts_link', None)
         if profile_link:
            response = urllib2.urlopen(profile_link)
-           with open(os.path.join(scheme, 'MLST-profiles.gz'), 'wb') as output_profile:
+           with open(os.path.join(scheme, 'snps-profiles.gz'), 'wb') as output_profile:
                output_profile.write(response.read())
 except HTTPError as Response_error:
     print '%d %s. <%s>\n Reason: %s' %(Response_error.code,

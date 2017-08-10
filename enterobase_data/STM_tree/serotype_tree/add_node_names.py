@@ -13,7 +13,7 @@ from time import sleep as sl
 #
 # tree.write(outfile="/Users/michaelpayne/Documents/UNSW/Salmonella/STM_tree_frm_entbase/R2/STM_cgmlst_seqtype_nodenames.nwk",format=1)
 
-infile = open("/Users/michaelpayne/Documents/UNSW/Salmonella/STM_tree_frm_entbase/R2/STM_cgmlst_seqtype_tree_fix.nwk",'r').read()
+infile = open("/Users/michaelpayne/Documents/UNSW/Salmonella/Enteritidis/mleecomp_tree/Enteriditis_phylip_tree.nwk",'r').read()
 
 
 tree = infile.split(":")
@@ -26,7 +26,7 @@ for i in tree:
     else:
         new.append(i)
 
-outfile = open("/Users/michaelpayne/Documents/UNSW/Salmonella/STM_tree_frm_entbase/R2/STM_cgmlst_seqtype_tree_fix2.nwk","w")
+outfile = open("/Users/michaelpayne/Documents/UNSW/Salmonella/Enteritidis/mleecomp_tree/Enteriditis_phylip_tree_nodes.nwk","w")
 
 outfile.write(":".join(new))
 

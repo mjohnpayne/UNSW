@@ -9,20 +9,24 @@ def most_common(lst):
 
 ## record number of strains, number in Australia % , majority country and %, earliest detection, latest detection, animal niche
 
-in_annots = open("/Users/michaelpayne/Documents/UNSW/Salmonella/STM_tree_frm_entbase/STM_cgmlst_22-5-17.txt","r").read().split("\r")
+in_annots = open("/Users/michaelpayne/Documents/UNSW/Salmonella/Enteritidis/MLST_definitions-annotations/Enteritidis_cgMLST.txt","r").read().split("\n")
 
-in_rMLST = [x.split('\t') for x in open("/Users/michaelpayne/Documents/UNSW/Salmonella/STM_tree_frm_entbase/STM_rMLST_30-5-17.txt","r").read().split('\n')]
+in_rMLST = [x.split('\t') for x in open("/Users/michaelpayne/Documents/UNSW/Salmonella/Enteritidis/MLST_definitions-annotations/Enteritidis_rMLST.txt","r").read().split('\n')]
 rMLST = {x[0]:x[34] for x in in_rMLST[1:] if x[34] != "NaN"}
 
 
-in_7gene = [x.split('\t') for x in open("/Users/michaelpayne/Documents/UNSW/Salmonella/STM_tree_frm_entbase/STM_7gene_30-5-17.txt","r").read().split('\n')]
+in_7gene = [x.split('\t') for x in open("/Users/michaelpayne/Documents/UNSW/Salmonella/Enteritidis/MLST_definitions-annotations/Enteritidis_7gene.txt","r").read().split('\n')]
 sevengene = {x[0]:x[34] for x in in_7gene[1:] if x[34] != "NaN"}
+
+in70entbactMLST = [x.split("\t") for x in open("/Users/michaelpayne/Documents/UNSW/Salmonella/Enterobacteriaceae_core/70-perc-blast/cgMLST_to_entbacMLST.txt","r").read().split('\n')]
+
+in70entbactMLST = {x[0]:x[1] for x in in70entbactMLST}
 
 # for i in sevengene:
 #     print i,sevengene[i]
 #     sl(0.2)
 
-ST_annots = open("/Users/michaelpayne/Documents/UNSW/Salmonella/STM_tree_frm_entbase/STM_cgmlst_22-5-17_ST_annots.txt","w")
+ST_annots = open("/Users/michaelpayne/Documents/UNSW/Salmonella/Enteritidis/mleecomp_tree/Enteriditis_tree_annots_26-6-17.txt","w")
 
 ST = {}
 
@@ -38,6 +42,8 @@ for i in in_annots[1:]:
             ST[seqtype]['rmlst'] = rMLST[col[0]]
         if col[0] in sevengene:
             ST[seqtype]['7gene'] = sevengene[col[0]]
+        if col[0] in in70entbactMLST:
+            ST[seqtype]['entbac70MLST'] = in70entbactMLST[col[0]]
         if col[23] != "":
             ST[seqtype]['institution'] = [col[23]]
         else:
@@ -72,6 +78,8 @@ for i in in_annots[1:]:
             ST[seqtype]['rmlst'] = rMLST[col[0]]
         if col[0] in sevengene:
             ST[seqtype]['7gene'] = sevengene[col[0]]
+        if col[0] in in70entbactMLST:
+            ST[seqtype]['entbac70MLST'] = in70entbactMLST[col[0]]
         if col[11] != "":
             ST[seqtype]['continent'] += [col[11]]
         ST[seqtype]['country'] += [col[12]]
@@ -94,7 +102,8 @@ for i in in_annots[1:]:
 
 print len(ST)
 
-ST_annots.write("Sequence type\tNumber of strains\tIn Australia?\tMajority Country\tMajority Country %\tEarliest detection\tLatest detection\tAnimal Niche\trMLST type\t7gene MLST type\tinstitution\tPhage Type\n")
+ST_annots.write("Sequence type\tNumber of strains\tIn Australia?\tMajority Country\tMajority Country %\tEarliest detection\tLatest detection\tAnimal Niche\trMLST type\t7gene MLST type\tinstitution\tPhage Type\tAus only\tminyear\tmaxyear\tenbact70\n")
+
 # ST_annots.write("Sequence type\tNumber of strains\tMajority Country\tMajority Country %\tEarliest detection\tLatest detection\tAnimal Niche\n")
 # for i in list(sorted(map(int,ST.keys()))):
 #     i = str(i)
@@ -111,12 +120,16 @@ for i in list(sorted(map(int,ST.keys()))):
     rST = ""
     instit = ""
     PT = ""
+    Aus_only = ""
+    eb70MLST = ""
     if '7gene' in ST[i]:
         sevgeneST = ST[i]['7gene']
     if 'Phage-T' in ST[i]:
         PT = most_common(ST[i]['Phage-T'])
     if 'rmlst' in ST[i]:
         rST = ST[i]['rmlst']
+    if 'entbac70MLST' in ST[i]:
+        eb70MLST = ST[i]["entbac70MLST"]
     if len(set(ST[i]['source_niche'])) > 1:
         source = "mixed"
     elif len(set(ST[i]['source_niche'])) == 0:
@@ -124,8 +137,8 @@ for i in list(sorted(map(int,ST.keys()))):
     else:
         source = ST[i]['source_niche'][0]
     if len(ST[i]["dates"]) > 0:
-        mindate = str(min(ST[i]["dates"]))
-        maxdate = str(max(ST[i]["dates"]))
+        mindate = min(ST[i]["dates"])
+        maxdate = max(ST[i]["dates"])
     else:
         mindate = ""
         maxdate = ""
@@ -144,10 +157,20 @@ for i in list(sorted(map(int,ST.keys()))):
         instit = ""
     else:
         instit = ST[i]['institution'][0]
+    if ST[i]["Australia"] > 0:
+        Aus_only = "Australia"
     # if ST[i]['Australia'] > 0:
     #     print i,ST[i]['country'],ST[i]['Australia'],common
     #     sl(0.2)
-    ST_annots.write(i+'\t'+str(ST[i]["count"])+'\t'+str(ST[i]["Australia"])+'\t'+common+'\t'+str(common_count_perc)+'\t'+mindate+'\t'+maxdate+'\t'+source+'\t'+ rST + '\t' + sevgeneST +'\t'+ instit +'\t'+ PT +'\n')
+    minyear = ""
+    maxyear = ""
+    if mindate != "":
+        minyear = mindate.year
+    if maxdate != "":
+        maxyear = maxdate.year
+
+
+    ST_annots.write(i+'\t'+str(ST[i]["count"])+'\t'+str(ST[i]["Australia"])+'\t'+common+'\t'+str(common_count_perc)+'\t'+str(mindate)+'\t'+str(maxdate)+'\t'+source+'\t'+ rST + '\t' + sevgeneST +'\t'+ instit +'\t'+ PT +'\t'+ Aus_only + '\t' +str(minyear) + '\t' + str(maxyear) + '\t' + eb70MLST + '\n')
     # ST_annots.write(i + '\t' + str(ST[i]["count"]) + '\t' + common + '\t' + str(common_count_perc) + '\t' + mindate + '\t' + maxdate + '\t' + source + '\n')
 
 ST_annots.close()
