@@ -66,7 +66,7 @@ for i in range(len(schemes)):
     for j in range(len(st)):
         cold[schemes[i]][st[j]] = ["#"+colist[j],"#"+colist2[j]]
 
-t = PhyloTree(newick="/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2_stm/stm_scheme/Trees/stm_mlst_3outberak_tree.nwk")
+# t = PhyloTree(newick="/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2_stm/stm_scheme/Trees/stm_mlst_3outberak_tree.nwk")
 # t = PhyloTree(newick="/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2/cgMLST_v2_frm_snps/trees/3_nullarbor_runs.nwk")
 # t.resolve_polytomy()
 #t = PhyloTree(newick="/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2/cgMLST_v2_frm_snps/NZ_outbreak_only.nwk")

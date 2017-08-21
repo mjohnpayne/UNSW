@@ -119,16 +119,16 @@ def determine_or_assign_st(new,st,profile,inaccs):
                 outf = open(prefix + "_hierarchical_ST/"+i+"_gene_profiles.txt","a+")
                 outf.write(str(no)+"\t" + "\t".join(map(str,newprofilels[1:]))+"\n")
                 outf.close()
-        # else:
-            # full_profs = open(hier_assign,"r").read().strip('\n').splitlines()
-            # notnewprof = ''
-            # for j in full_profs:
-            #     j=j.split("\t")
-            #     if j[-1] == st:
-            #         notnewprof = strain + "\t".join(i[1:])+'\n'
-            # write_profs = open(hier_assign, "a+")
-            # write_profs.write(notnewprof)
-            # write_profs.close()
+        else:
+            full_profs = open(hier_assign,"r").read().strip('\n').splitlines()
+            notnewprof = ''
+            for j in full_profs:
+                j=j.split("\t")
+                if j[-1] == st:
+                    notnewprof = strain + "\t".join(i[1:])+'\n'
+            write_profs = open(hier_assign, "a+")
+            write_profs.write(notnewprof)
+            write_profs.close()
     outstring = open(prefix + "_hierarchical_assignments.txt", "a+")
     outstring.write(strain)
     string = ""

@@ -69,49 +69,55 @@ def run_all(dict,num):
         return run_all(dict1,num)
 
 
+outnm = sys.argv[1].strip(".txt")+"_hcorrected0.txt"
 
+outhST = open(outnm,"w")
 
 hST = open(sys.argv[1],"r").read().splitlines()
 
 stdict = {}
 
+type = sys.argv[2]
 
+if type == "snp":
+    for i in hST[1:]:
+        col = i.split("\t")
+        if col[0] != "":
+            stdict[col[0]] = col[2::2]
+    header = hST[0].split('\t')
+    header = ["corr_" + x for x in header[2::2]]
+    outhST.write("Strain\tcorr_hier_string_ST\tcorr_final4_hier_string\t" + "\t".join(header) + "\n")
 
+elif type == "entbase":
+    for i in hST[1:]:
+        col = i.split("\t")
+        if col[0] != "":
+            stdict[col[0]] = col[1].split("-")
+    header = hST[0].split('\t')
+    header = ["corr_"+x for x in header[3:]] + ["cgMLST"]
+    outhST.write("cgMLST_type\tcorr_hier_string_ST\tcorr_final4_hier_string\t"+"\t".join(header)+"\n")
 
-### from snp base scheme
-for i in hST[1:]:
-    col = i.split("\t")
-    if col[0] != "":
-        stdict[col[0]] = col[2::2]
-# print stdict
-
-### from enterobase scheme
-
-# for i in hST[1:]:
-#     col = i.split("\t")
-#     if col[0] != "":
-#         stdict[col[0]] = col[1].split("-")
-# print stdict
-
+elif type == "cc":
+    for i in hST[1:]:
+        col = i.split("\t")
+        if col[0] != "":
+            stdict[col[0]] = col[-1].split("-")
+    header = hST[0].split('\t')
+    header = ["corr_" + x for x in header[1:-1]]
+    outhST.write("Strain\tcorr_cc_hier_string_ST\tcorr_cc_final4_hier_string\t" + "\t".join(header) + "\n")
 
 
 
 final_dict = run_all(stdict,9)
 
-outnm = sys.argv[1].strip(".txt")+"_hcorrected0.txt"
 
-outhST = open(outnm,"w")
 
 
 
 
 ###snp_based
 
-header = hST[0].split('\t')
 
-header = ["corr_"+x for x in header[2::2]]
-
-outhST.write("Strain\tcorr_hier_string_ST\tcorr_final4_hier_string\t"+"\t".join(header)+"\n")
 
 ### enterobase based
 

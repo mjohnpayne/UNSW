@@ -38,12 +38,14 @@ def get_N_HexCol(N=5):
 # in_hier = open("/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2/cgmlstv2_from_enterobase/hier_for_tree_anno_hcorrected0.txt","r").read().splitlines()
 in_hier = open("/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2_stm/stm_scheme/hierMLST_stm_hierarchical_assignments_hcorrected0.txt","r").read().splitlines()
 
+in_cc = open("/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2_stm/stm_scheme/hierMLST_stm_cc_hierarchy.txt","r").read().splitlines()
+
 schemes = ['7','20','30','100','160','260','420','560','1445', "cgMLST","stmcgMLST"]
 
 annots = {}
 
-t = Tree(newick="/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2_stm/stm_scheme/Trees/anast_tree.nwk")
-
+# t = Tree(newick="/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2_stm/stm_scheme/Trees/all_inc_soph.nwk")
+t=Tree(newick="/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2_stm/stm_scheme/Trees/Westmead_strains/subclade_westmead.nwk")
 stlist = []
 for node in t.traverse():
     stlist.append(node.name)
@@ -58,11 +60,23 @@ cols = {}
 #     sts = i[1].split("-")
 #     annots[i[0]] = sts
 
-for i in in_hier[1:]:
+####for corr hierarchical
+
+
+# for i in in_hier[1:]:
+#     i = i.split('\t')
+#     if i[0] in stlist:
+#         sts = i[1].split("-")
+#         annots[i[0]] = sts
+
+#### for clonal complex
+
+for i in in_cc[1:]:
     i = i.split('\t')
     if i[0] in stlist:
-        sts = i[1].split("-")
+        sts = i[-1].split("-")
         annots[i[0]] = sts
+
 sttypes = {}
 
 print "done1"
@@ -215,6 +229,6 @@ for s in usedschemes:
 
     # t.show(tree_style=ts)
 
-    t.render(file_name="/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2_stm/stm_scheme/Trees/anast_"+s+".pdf",tree_style=ts,dpi=200)
+    t.render(file_name="/Users/michaelpayne/Documents/UNSW/Salmonella/new_typing_scheme/cgMLSTv2_stm/stm_scheme/Trees/Westmead_strains/westmead_sub_cc3_"+s+".pdf",tree_style=ts,dpi=200)
 
 
